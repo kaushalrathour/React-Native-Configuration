@@ -49,6 +49,10 @@ dependencies {
     classpath("com.google.gms:google-services:4.4.2")
 }
 ```
+2. Add to android/app/build.gradle
+```bash
+apply plugin: 'com.google.gms.google-services'
+```
 ### Create android/app/google-services.json
 ### Get this file from Firebase Console
 
@@ -77,86 +81,14 @@ module.exports = {
 * ## Firebase Web Client Configuration
 ```bash
 WEB_CLIENT_ID="your-web-client-id"  # From google-services.json > oauth_client > client_type 3
-API_KEY="your-api-key"              # From google-services.json > current_key
-PROJECT_ID="your-project-id"        # From Firebase project settings
-MESSAGING_SENDER_ID="your-sender-id" # From Firebase Cloud Messaging
-APP_ID="your-app-id"                # From Firebase app configuration
-AUTH_DOMAIN="your-project.firebaseapp.com"
+apiKey="your-api-key"              # From google-services.json > current_key
+projectId="your-project-id"        # From Firebase project settings
+messagingSenderId="your-sender-id" # From Firebase Cloud Messaging
+appId="your-app-id"                # From Firebase app configuration
+authDomain="your-project.firebaseapp.com"
 ```
-### Security Alert
-* ❗ Always add .env to .gitignore
-* ❗ Never commit sensitive credentials
-
-
-## UI and Utilities
+#
 ```bash
-npm install react-native-paper react-native-toast-message
-```
-
-
-## Android Configuration
-# Add to android/app/build.gradle
-```bash
-apply from: file(\"../../node_modules/react-native-vector-icons/fonts.gradle\")
-```
-```bash
-apply plugin: 'com.google.gms.google-services'
-```
-## Add to android/build.gradle dependencies
-```bash
-classpath("com.google.gms:google-services:4.4.2")
-```
-# Note: Manually place google-services.json in android/app/
-
-## KeyStore Management
-# Generate keystore
-```bash
-keytool -genkeypair -v -keystore myapp-release.keystore -alias myapp-alias -keyalg RSA -keysize 2048 -validity 10000
-```
-# Get SHA-1 fingerprint
-```bash
-keytool -list -v -keystore myapp-release.keystore -alias myapp-alias
-```
-## Gradle Clean
-```bash
-cd android && ./gradlew clean
-```
-## Form and Validation
-```bash
-npm install formik yup
-```
-## Signing Configuration (Add to android/app/build.gradle)
-```bash
-android {
-    // ... existing configurations
-    
-    signingConfigs {
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
-        release {
-            storeFile file('C:\\keystores\\timer-app-release-key.keystore')
-            storePassword 'android'
-            keyPassword 'android'
-            keyAlias 'my-key-alias'
-        }
-    }
-
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
-        release {
-            signingConfig signingConfigs.release
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
-}
-```
 ## Firebase Configuration (src/firebaseConfig.ts)
 ```bash
 import { initializeApp } from "@react-native-firebase/app";
@@ -176,32 +108,53 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 ```
 
-## Env Setup (babel.config.js)
-```
-module.exports = {
-  presets: ['module:@react-native/babel-preset'],
-  plugins: [
-    [
-      'module:react-native-dotenv',
-      {
-        moduleName: '@env',
-        path: '.env',
-      },
-    ],
-  ],
-};
-```
-## .env Sample
+### Security Alert
+* ❗ Always add .env to .gitignore
+* ❗ Never commit sensitive credentials
+
+## 5. Android Release Configuration
+Play Store-ready build setup
+
+* ### 5.1 Generate Signing Keystore
 ```bash
-webClientId = "your-web-client-id"
+keytool -genkeypair -v -keystore myapp-release.keystore -alias myapp-alias -keyalg RSA -keysize 2048 -validity 10000
+```
+* ### 5.2 Get SHA-1 fingerprint
+```bash
+keytool -list -v -keystore myapp-release.keystore -alias myapp-alias
+```
+* ### 5.3: 5.2 Build Configuration
+Update android/app/build.gradle:
+```bash
+android {
+    signingConfigs {
+        release {
+            storeFile file('myapp-release.keystore')
+            storePassword 'your_strong_password'
+            keyAlias 'myapp-alias'
+            keyPassword 'another_strong_password'
+        }
+    }
+    
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+}
+```
+## UI and Utilities
+```bash
+npm install react-native-paper react-native-toast-message
+```
 
-apiKey = "your-api-key"
-
-projectId = "your-project-id"
-
-messagingSenderId = "your-messaging-sender-id"
-
-appId = "your-app-id"
-
-authDomain = "your-auth-domain.firebaseapp.com"
+## Gradle Clean
+```bash
+cd android && ./gradlew clean
+```
+## Form and Validation
+```bash
+npm install formik yup
 ```
