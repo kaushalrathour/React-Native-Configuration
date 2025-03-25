@@ -15,6 +15,9 @@ Optimized for React Native 0.77.1 stability
 ```bash
 npx @react-native-community/cli@15.0.1 init AppName --version 0.77.1
 ```
+```bash
+npx @react-native-community/cli init AppName --package-name=com.orgination.appname
+```
 ### Replace AppName with your project name (PascalCase recommended)
 * ### 1.2 Install Essential Dependencies
 Foundational packages every production app needs
@@ -35,6 +38,9 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 Modern stack navigation with gesture support
 ```bash
 npm install @react-navigation/native@^7.0.14 @react-navigation/stack@^7.1.1 react-native-gesture-handler@^2.23.1 react-native-reanimated@^3.16.7 react-native-safe-area-context@^5.2.0 react-native-screens@^4.7.0
+```
+```bash
+npm install @react-navigation/native @react-navigation/stack react-native-gesture-handler react-native-reanimated react-native-safe-area-context react-native-screens
 ```
 ## 3. Firebase Integration Mastery
 Complete Firebase services setup with security best practices
